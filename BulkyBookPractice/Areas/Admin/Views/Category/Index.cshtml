@@ -1,0 +1,85 @@
+﻿@model BulkyBookPractice.Models.ViewModels.CategoryVM
+@{
+    ViewData["Title"] = "Book Categories";
+}
+
+<br />
+<div class="row">
+
+    @* Page Header/Title *@
+    <div class="col-6">
+        <h2 class="text-primary">Category List</h2>
+    </div>
+
+    @* Create New Category button *@
+    <div class="col-6 text-end">
+        <a class="btn btn-primary" asp-action="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New Category</a>
+    </div>
+</div>
+
+<div class="p-4 border rounded">
+    @if (Model.Categories.Count() > 0)
+    {
+        @* Category Table Head *@
+        <table class="table table-striped border">
+            <tr class="table-secondary">
+                <th>
+                    Catgeory Name
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.Categories)
+            {
+                <tr>
+                    @* Category Display Data *@
+                    <td>
+                        @Html.DisplayFor(m => item.Name)
+                    </td>
+
+                    <td>
+                        @* Edit/Upsert Category Button *@
+                        <div class="text-center">
+                            <a href="/Admin/Category/Upsert/@item.Id" class="btn btn-success text-white"
+                               style="cursor:pointer">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;
+
+                            @* Delete Category Button *@
+                            <button onclick=Delete("/Admin/Category/Delete/@item.Id")
+                                    class="btn btn-danger text-white" style="cursor:pointer">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @* Pagination *@
+        <div page-model="@Model.Pagination" page-class-enabled="true" page-class="btn border"
+             page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+             class="btn-group float-end"></div>
+        <br />
+    }
+    else
+    {
+        <p> No Categories Exists.</p>
+    }
+</div>
+
+@section Scripts{
+    <script>
+
+        @* Delete Category Javascript Function *@
+        function Delete(url) {
+            $.ajax({
+                type: 'DELETE',
+                url: url,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

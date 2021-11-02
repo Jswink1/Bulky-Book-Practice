@@ -1,0 +1,24 @@
+﻿This file contains instructions for setting up External Login for Facebook and Google, and also Two-Factor Authentication
+
+Facebook Login Steps:
+1. Go to facebook for developers, create your app, go to settings, and paste the Id and Secret here
+2. Go to your app, set up "facebook login", run the app in Visual Studio and enter the URL "https://localhost:#####/"
+3. Go to your app settings, and in the "Valid OAuth Redirect URIs" type "https://localhost:#####/signin-facebook"
+4. Go to the ExternalLogin PageModel, add the necessary fields to the InputModel and the Page View
+5. Auto-Populate the name and email fields with the values from facebook in the OnGetCallbackAsync method
+6. Change the registered user model from IdentityUser to ApplicationUser in the OnPostConfirmationAsync method
+7. Assign the new user a role of Customer
+
+Steps to configure Google Login:
+1. Go to google cloud console, create your app
+2. Go to "APIs and Services," click the "Enable APIs and Services" button, search for "Google+ API"
+3. Go to "OAuth Consent Screen." Select External. Enter your app name and email
+4. Go to "Credentials", click "Create Credential" for "OAuth Client Id",
+   enter app name, app type, LocalHost URI, and "https://localhost:#####/signin-google" for Authorized Redirect URI
+5. Insert Client Id and Secret
+
+Two-Factor Authentication Steps:
+1. Change the Layout path to the correct path in the Account/Manage/_Layout.cshtml file
+2. Add a _ViewStart.cshtml file to the Account/Manage/ folder
+3. Paste qrcode.js file into WebRoot js folder
+4. Paste Javascript reference to the qrcode.js file in the Account/Manage/EnableAuthenticator.cshtml file

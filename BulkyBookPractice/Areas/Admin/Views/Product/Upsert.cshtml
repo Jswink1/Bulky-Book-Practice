@@ -1,0 +1,206 @@
+﻿@model BulkyBookPractice.Models.ViewModels.ProductVM
+@{    
+    @* If the model is being edited change the title *@
+    var title = "Create Product";
+    @if (Model.Product.Id != 0)
+    {
+        title = "Edit Product";
+    }
+
+    ViewData["Title"] = title;
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model.Product.Id != 0)
+        {
+            @* If the model is being edited include the Model Id as a hidden field *@
+            <input type="hidden" asp-for="Product.Id" />
+        }
+
+        @* Page Header/Title *@
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+
+        @* Product Title Input *@
+    <div class="col-8 pt-4">
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Title"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.Title" class="form-control" />
+                <span asp-validation-for="Product.Title" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product ISBN Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.ISBN"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.ISBN" class="form-control" />
+                <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product Author Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Author"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.Author" class="form-control" />
+                <span asp-validation-for="Product.Author" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product Description Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Description"></label>
+            </div>
+            <div class="col-8">
+                <textarea asp-for="Product.Description" class="form-control"></textarea>
+            </div>
+        </div>
+
+        @* Product ListPrice Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.ListPrice"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.ListPrice" class="form-control" />
+                <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product Price Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Price"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.Price" class="form-control" />
+                <span asp-validation-for="Product.Price" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product Price of 50 Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Price50"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.Price50" class="form-control" />
+                <span asp-validation-for="Product.Price50" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Product Price of 100 Input *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                <label asp-for="Product.Price100"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Product.Price100" class="form-control" />
+                <span asp-validation-for="Product.Price100" class="text-danger"></span>
+            </div>
+        </div>
+
+        @* Category Drop Down Selection List *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                Category
+            </div>
+            <div class="col-8">
+                @Html.DropDownListFor(productVM => productVM.Product.CategoryId,
+                                      Model.CategoryList,
+                                      "-Select a Category",
+                                      new { @class = "form-control" })
+            </div>
+        </div>
+
+        @* CoverType Drop Down Selection List *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                Cover Type
+            </div>
+            <div class="col-8">
+                @Html.DropDownListFor(productVM => productVM.Product.CoverTypeId,
+                                      Model.CoverTypeList,
+                                      "-Select a Cover Type",
+                                      new { @class = "form-control" })
+            </div>
+        </div>
+
+        @* Image File Upload *@
+        <div class="form-group row mt-2">
+            <div class="col-3">
+                Image
+            </div>
+            <div class="col-8">
+                <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            <div class="col-8 offset-3">
+                @*Check whether we need to display Edit or Create Button*@
+                @if (Model.Product.Id != 0)
+                {
+                    <partial name="_EditAndBackToListButton" model="Model.Product.Id" />
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" onlick="return validateInput()" class="btn btn-primary form-control">Create</button>
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+        @*If we are editing, display the current image*@
+        @if (Model.Product.Id != 0)
+        {
+            <div class="col-3 offset-1 mt-4">
+                <img src="@Model.Product.ImageUrl" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9" />
+            </div>
+        }
+    </div>
+</form>
+
+@section Scripts{
+    <script src="https://cdn.tiny.cloud/1/kcmkof3wb0uhjlr4up6uyig5s7ddla2nn8ensssdsei1yxa7/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+
+        // Initialize TinyMCE textarea plugin
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+
+        // Display SweetAlert if user did not select an Image file
+        function validateInput() {
+            if (document.getElementById("uploadBox").value == null) {
+                swal("Error", "Please select an image", "error");
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+}
